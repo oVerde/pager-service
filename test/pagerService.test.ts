@@ -84,7 +84,6 @@ describe("PagerService", () => {
    *And the Pager notifies all targets of the first level of the escalation policy,
    *And sets a 15-minutes acknowledgement delay.
    **/
-
   test("should notify first-level targets when an alert is received for a healthy service", async () => {
     // Act
     await pagerService.processAlert(alert);
@@ -113,7 +112,6 @@ describe("PagerService", () => {
    *Then the Pager notifies all targets of the next level of the escalation policy,
    *And sets a 15-minutes acknowledgement delay.
    **/
-
   test("should escalate to next level when acknowledgment timeout occurs without acknowledgment", async () => {
     // Arrange
     const emailTargetLevel2 = new EmailTarget(
@@ -149,7 +147,6 @@ describe("PagerService", () => {
    *Then the Pager doesn't notify any Target,
    *And doesn't set an acknowledgement delay.
    **/
-
   test("should not escalate if acknowledgment is received before timeout", async () => {
     // Arrange
     const emailTargetLevel2 = new EmailTarget(
@@ -205,8 +202,8 @@ describe("PagerService", () => {
     pagerService.processAlert(newAlert);
 
     // Assert Does Not Set Another Acknowledgement Delay
-    expect(mockEmailService.sendEmail).toHaveBeenCalledTimes(1); // Only initial notifications
-    expect(mockSMSService.sendSMS).toHaveBeenCalledTimes(1); // Only initial notification
+    expect(mockEmailService.sendEmail).toHaveBeenCalledTimes(1); // Only the initial notifications
+    expect(mockSMSService.sendSMS).toHaveBeenCalledTimes(1); // Only initial
     expect(mockTimerService.startTimer).toHaveBeenCalledTimes(1); // Only one timer
   });
 
@@ -234,7 +231,7 @@ describe("PagerService", () => {
     expect(monitoredService.state).toBe(ServiceState.Healthy);
     expect(monitoredService["currentAlert"]).toBeUndefined();
     expect(mockTimerService.cancelTimer).toHaveBeenCalledTimes(1);
-    expect(mockEmailService.sendEmail).toHaveBeenCalledTimes(1); // Only initial notifications
+    expect(mockEmailService.sendEmail).toHaveBeenCalledTimes(1); // Only initial
   });
 
   /**
@@ -249,7 +246,7 @@ describe("PagerService", () => {
     await pagerService.processAlert(simultaneousAlert);
 
     // Assert
-    expect(mockEmailService.sendEmail).toHaveBeenCalledTimes(1); // Only initial notifications
+    expect(mockEmailService.sendEmail).toHaveBeenCalledTimes(1); // Only initial
     expect(mockSMSService.sendSMS).toHaveBeenCalledTimes(1);
     expect(monitoredService["currentAlert"]!.notifiedTargets.size).toBe(2);
   });
@@ -306,7 +303,7 @@ describe("PagerService", () => {
     triggerTimer(secondTimerId);
 
     // Assert
-    expect(mockEmailService.sendEmail).toHaveBeenCalledTimes(1); // Only initial notifications
+    expect(mockEmailService.sendEmail).toHaveBeenCalledTimes(1); // Only initial
     expect(mockSMSService.sendSMS).toHaveBeenCalledTimes(1);
     expect(mockTimerService.startTimer).toHaveBeenCalledTimes(1); // Initial and one retry
   });
