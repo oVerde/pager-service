@@ -61,7 +61,6 @@ This command will:
 After running the tests, you should see an output similar to:
 
 ```plaintext
-
 PASS test/pagerService.test.ts
 PagerService
 ✓ should notify first-level targets when an alert is received for a healthy service (X ms)

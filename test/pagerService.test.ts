@@ -23,7 +23,7 @@ let timerCallbacks: { [key: string]: () => void } = {};
 let timerIdCounter = 0;
 
 const mockTimerService: TimerService = {
-  startTimer: jest.fn((duration: number, callback: () => void) => {
+  startTimer: jest.fn((_: number, callback: () => void) => {
     const timerId = `timer-${timerIdCounter++}`;
     timerCallbacks[timerId] = callback;
     return timerId;
