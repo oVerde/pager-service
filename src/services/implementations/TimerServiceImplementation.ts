@@ -6,13 +6,18 @@ import { TimerService } from "../interfaces/TimerService";
  * Also involves IAM permissions changes
  **/
 
-export class TimerServiceImplementation implements TimerService {
+export class MockAWSTimerService implements TimerService {
+  private timers: { [key: string]: NodeJS.Timeout } = {};
+  private timerIdCounter = 0;
+
   startTimer(duration: number, callback: () => void): string {
-    const timerId = setTimeout(callback, duration);
-    return timerId.toString();
+    const timerId = `timer-${this.timerIdCounter++}`;
+    this.timers[timerId] = setTimeout(callback, duration);
+    return timerId;
   }
 
   cancelTimer(timerId: string): void {
-    clearTimeout(Number(timerId));
+    clearTimeout(this.timers[timerId]);
+    delete this.timers[timerId];
   }
 }
