@@ -23,12 +23,12 @@ export class MonitoredService {
     this.timerService = timerService;
   }
 
-  receiveAlert(alert: Alert): void {
+  async receiveAlert(alert: Alert): Promise<void> {
     if (this.state === ServiceState.Healthy) {
       this.state = ServiceState.Unhealthy;
       this.currentAlert = alert;
       alert.escalationLevelNumber = 0;
-      this.notifyCurrentLevelTargets();
+      await this.notifyCurrentLevelTargets();
       this.startAcknowledgmentTimer();
     }
     // Do nothing if already Unhealthy
@@ -43,7 +43,7 @@ export class MonitoredService {
     this.currentAlert = undefined;
   }
 
-  acknowledgeAlert(): void {
+  async acknowledgeAlert(): Promise<void> {
     if (this.currentAlert && !this.currentAlert.acknowledged) {
       this.currentAlert.acknowledge();
       if (this.acknowledgmentTimerId) {
@@ -69,17 +69,24 @@ export class MonitoredService {
     }
   }
 
-  private notifyCurrentLevelTargets(): void {
+  private async notifyCurrentLevelTargets(): Promise<void> {
+    const alert = this.currentAlert;
+    if (!alert) return console.error(`Current alert is missing`);
+
     const level = this.escalationPolicy.getLevel(
       this.currentAlert!.escalationLevelNumber,
     );
     if (level) {
-      level.targets.forEach(async (target) => {
+      for (const target of level.targets) {
         if (!this.currentAlert!.notifiedTargets.has(target.id)) {
-          await target.notify(this.currentAlert!);
-          this.currentAlert!.notifiedTargets.add(target.id);
+          try {
+            await target.notify(this.currentAlert!);
+            this.currentAlert!.notifiedTargets.add(target.id);
+          } catch (error) {
+            console.error(`Error notifying target ${target.id}`, error);
+          }
         }
-      });
+      }
     }
   }
 

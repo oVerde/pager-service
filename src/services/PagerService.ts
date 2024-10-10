@@ -14,23 +14,23 @@ export class PagerService {
     this.monitoredServices.set(service.id, service);
   }
 
-  processAlert(alert: Alert): void {
+  async processAlert(alert: Alert): Promise<void> {
     const service = this.monitoredServices.get(alert.serviceId);
     if (service) {
-      service.receiveAlert(alert);
+      await service.receiveAlert(alert);
     } else {
-      // TODO: handle unknown service
+      console.error(`Service with ID ${alert.serviceId} not found.`);
     }
   }
 
-  processAcknowledgment(serviceId: ServiceId): void {
+  async processAcknowledgment(serviceId: ServiceId): Promise<void> {
     const service = this.monitoredServices.get(serviceId);
     if (service) {
-      service.acknowledgeAlert();
+      await service.acknowledgeAlert();
     }
   }
 
-  processHealthyEvent(serviceId: ServiceId): void {
+  async processHealthyEvent(serviceId: ServiceId): Promise<void> {
     const service = this.monitoredServices.get(serviceId);
     if (service) {
       service.receiveHealthyEvent();
