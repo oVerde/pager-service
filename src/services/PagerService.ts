@@ -3,6 +3,9 @@ import { MonitoredService } from "../domain/models/MonitoredService";
 import { TimerService } from "./interfaces/TimerService";
 import { Alert } from "../domain/models/Alert";
 
+/**
+ * PagerService manages the actual alert processing and notification logic
+ **/
 export class PagerService {
   private monitoredServices: Map<ServiceId, MonitoredService>;
 
