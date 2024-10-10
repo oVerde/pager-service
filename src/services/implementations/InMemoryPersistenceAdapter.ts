@@ -1,3 +1,5 @@
+import { PersistenceService } from "../interfaces";
+
 export class InMemoryPersistenceAdapter implements PersistenceService {
   private storage = new Map<string, any>();
 
