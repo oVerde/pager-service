@@ -1,8 +1,8 @@
 import {
   PagerService,
-  TimerServiceImplementation,
-  EmailServiceImplementation,
-  SMSServiceImplementation,
+  MockAWSTimerService,
+  MockSendGridService,
+  MockTwilioService,
 } from "./services";
 import {
   MonitoredService,
@@ -15,9 +15,9 @@ import {
 import { ServiceId } from "./types";
 
 // Instantiate service implementations
-const timerService = new TimerServiceImplementation();
-const emailService = new EmailServiceImplementation();
-const smsService = new SMSServiceImplementation();
+const timerService = new MockAWSTimerService();
+const emailService = new MockSendGridService();
+const smsService = new MockTwilioService();
 
 // Create targets
 const emailTarget1 = new EmailTarget(
